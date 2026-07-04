@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as pdfjs from "pdfjs-dist";
 import type { PDFDocumentProxy, PDFPageProxy, PageViewport } from "pdfjs-dist";
-
 export type PageRenderedCallback = (pageIndex: number, dataUrl: string) => void;
 
 @Injectable({
