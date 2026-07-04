@@ -1,0 +1,93 @@
+<div class="extractor">
+
+  <!-- ── Top nav / header ──────────────────────────────────────────────── -->
+  <header class="extractor__header">
+    <div class="extractor__header-inner">
+      <div class="extractor__logo" aria-label="PDF Extractor">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <rect width="28" height="28" rx="8" fill="var(--color-primary)" />
+          <path d="M8 20V8h7l5 5v7H8Z" fill="white" opacity="0.15" />
+          <path d="M8 8h7l5 5v7H8V8Z" stroke="white" stroke-width="1.5" stroke-linejoin="round" />
+          <path d="M15 8v5h5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M11 15h6M11 18h4" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        <span class="extractor__logo-text">PDF Extractor</span>
+      </div>
+
+      @if (hasUploadedPdf()) {
+        <div class="extractor__step-indicator" aria-current="step">
+          <span class="step-dot step-dot--done" aria-hidden="true">✓</span>
+          <span class="step-label">Uploaded</span>
+          <span class="step-arrow" aria-hidden="true">›</span>
+          <span class="step-dot step-dot--active" aria-hidden="true">2</span>
+          <span class="step-label step-label--active">Select pages</span>
+          <span class="step-arrow" aria-hidden="true">›</span>
+          <span class="step-dot" aria-hidden="true">3</span>
+          <span class="step-label">Download</span>
+        </div>
+      }
+    </div>
+  </header>
+
+  <!-- ── Main content ──────────────────────────────────────────────────── -->
+  <main class="extractor__main">
+
+    <!-- Upload view -->
+    @if (!hasUploadedPdf() && !isUploading() && !isRendering()) {
+      <div class="extractor__upload-view">
+        <div class="extractor__welcome">
+          <h1 class="extractor__title">Extract PDF Pages</h1>
+          <p class="extractor__subtitle">
+            Upload a PDF, select the pages you want, and download a new document in seconds.
+          </p>
+        </div>
+        <app-upload-zone (fileSelected)="onFileSelected($event)" />
+      </div>
+    }
+
+    <!-- Upload/render loading view -->
+    @if (!hasUploadedPdf() && (isUploading() || isRendering())) {
+      <div class="extractor__loading-view" role="status" aria-live="polite">
+        <app-spinner [size]="40" color="var(--color-primary)" />
+        @if (isUploading()) {
+          <p class="extractor__loading-text">Uploading your PDF…</p>
+        }
+        @if (isRendering() && !isUploading()) {
+          <p class="extractor__loading-text">Rendering page previews…</p>
+        }
+      </div>
+    }
+
+    <!-- Page selection view -->
+    @if (hasUploadedPdf() && uploadedPdf() !== null) {
+      <div class="extractor__grid-view">
+        <app-page-grid
+          [pdfMetadata]="uploadedPdf()!"
+          [thumbnailUrls]="thumbnailUrls()"
+          [selectedPages]="selectedPages()"
+          [isRendering]="isRendering()"
+          [renderProgress]="renderProgress()"
+          (pageToggled)="onPageToggled($event)"
+          (selectAllToggled)="onSelectAllToggled($event)"
+        />
+      </div>
+    }
+
+  </main>
+
+  <!-- ── Sticky action bar (shown while a PDF is loaded) ───────────────── -->
+  @if (hasUploadedPdf() && uploadedPdf() !== null) {
+    <app-action-bar
+      [selectedCount]="selectedCount()"
+      [totalPages]="uploadedPdf()!.totalPages"
+      [isExtracting]="isExtracting()"
+      [isUploading]="isUploading()"
+      [isRendering]="isRendering()"
+      (extractClicked)="onExtractClicked()"
+      (resetClicked)="onResetClicked()"
+    />
+  }
+
+  <!-- ── Toast notifications overlay ──────────────────────────────────── -->
+  <app-toast />
+</div>

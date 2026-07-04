@@ -1,0 +1,55 @@
+<div class="action-bar">
+  <div class="action-bar__status">
+    @if (isUploading()) {
+      <span class="action-bar__status-text action-bar__status-text--muted">
+        <app-spinner [size]="14" color="var(--color-text-muted)" />
+        Uploading…
+      </span>
+    } @else if (isRendering()) {
+      <span class="action-bar__status-text action-bar__status-text--muted">
+        <app-spinner [size]="14" color="var(--color-text-muted)" />
+        Rendering previews…
+      </span>
+    } @else if (selectedCount() === 0) {
+      <span class="action-bar__status-text action-bar__status-text--muted">
+        No pages selected
+      </span>
+    } @else {
+      <span class="action-bar__status-text">
+        <span class="action-bar__badge">{{ selectedCount() }}</span>
+        of {{ totalPages() }} page{{ totalPages() !== 1 ? 's' : '' }} selected
+      </span>
+    }
+  </div>
+
+  <div class="action-bar__actions">
+    <button
+      class="btn btn-secondary"
+      type="button"
+      (click)="onResetClick()"
+      [disabled]="isExtracting()"
+    >
+      Upload new file
+    </button>
+
+    <button
+      class="btn btn-primary action-bar__extract-btn"
+      type="button"
+      (click)="onExtractClick()"
+      [disabled]="!canExtract"
+      [attr.aria-busy]="isExtracting()"
+    >
+      @if (isExtracting()) {
+        <app-spinner [size]="16" color="#ffffff" />
+        Extracting…
+      } @else {
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M8 1v9M4 7l4 4 4-4" stroke="currentColor" stroke-width="1.75"
+            stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M2 13h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+        </svg>
+        Extract &amp; Download
+      }
+    </button>
+  </div>
+</div>

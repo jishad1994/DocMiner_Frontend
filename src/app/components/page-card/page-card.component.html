@@ -1,0 +1,35 @@
+<div class="page-card" [class.page-card--selected]="isSelected()" [class.page-card--rendering]="isRendering()"
+    (click)="onCardClick()" (keydown)="onKeyDown($event)" tabindex="0" role="checkbox"
+    [attr.aria-checked]="isSelected()" [attr.aria-label]="'Page ' + pageNumber()">
+    <!-- Checkbox — visually top-right of the card -->
+    <div class="page-card__checkbox-wrap">>
+        <input type="checkbox" (click)="$event.stopPropagation()" [id]="checkboxId()" [checked]="isSelected()"
+            (change)="onCheckboxChange($event)" class="page-card__checkbox"
+            [attr.aria-label]="'Select page ' + pageNumber()" />
+        <label [for]="checkboxId()" class="page-card__checkbox-label">
+            <span class="page-card__check-icon" aria-hidden="true">✓</span>
+        </label>
+    </div>
+
+    <!-- Thumbnail -->
+    <div class="page-card__thumbnail-wrap">
+        @if (isRendering()) {
+        <div class="page-card__skeleton" aria-hidden="true">
+            <div class="page-card__skeleton-shimmer"></div>
+        </div>
+        } @else {
+        <img [src]="thumbnailUrl()" [alt]="'Thumbnail of page ' + pageNumber()" class="page-card__thumbnail"
+            loading="lazy" draggable="false" />
+        }
+    </div>
+
+    <!-- Page number label -->
+    <div class="page-card__footer">
+        <span class="page-card__number">Page {{ pageNumber() }}</span>
+    </div>
+
+    <!-- Selected overlay ring -->
+    @if (isSelected()) {
+    <div class="page-card__selected-ring" aria-hidden="true"></div>
+    }
+</div>

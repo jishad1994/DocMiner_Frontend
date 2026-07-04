@@ -1,0 +1,90 @@
+ .toast-container {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 0.625rem;
+        max-width: min(400px, calc(100vw - 3rem));
+      }
+ 
+      .toast {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.625rem;
+        padding: 0.875rem 1rem;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-lg);
+        font-size: 0.875rem;
+        font-weight: 500;
+        animation: slide-in 200ms ease;
+        border: 1px solid transparent;
+ 
+        &--success {
+          background: var(--color-success-light);
+          border-color: var(--color-success-border);
+          color: var(--color-success);
+        }
+ 
+        &--error {
+          background: var(--color-error-light);
+          border-color: var(--color-error-border);
+          color: var(--color-error);
+        }
+ 
+        &--info {
+          background: var(--color-primary-light);
+          border-color: var(--color-primary-border);
+          color: var(--color-primary);
+        }
+      }
+ 
+      .toast__icon {
+        flex-shrink: 0;
+        font-size: 1rem;
+        line-height: 1.4;
+      }
+ 
+      .toast__message {
+        flex: 1;
+        line-height: 1.4;
+        color: var(--color-text-primary);
+      }
+ 
+      .toast__close {
+        flex-shrink: 0;
+        background: none;
+        border: none;
+        font-size: 0.75rem;
+        opacity: 0.5;
+        padding: 0.125rem 0.25rem;
+        cursor: pointer;
+        color: inherit;
+        line-height: 1;
+        align-self: center;
+ 
+        &:hover {
+          opacity: 1;
+        }
+      }
+ 
+      @keyframes slide-in {
+        from {
+          opacity: 0;
+          transform: translateY(0.5rem);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+ 
+      @media (max-width: 480px) {
+        .toast-container {
+          bottom: 1rem;
+          right: 1rem;
+          left: 1rem;
+          max-width: none;
+        }
+      }

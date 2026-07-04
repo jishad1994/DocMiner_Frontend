@@ -1,0 +1,163 @@
+.page-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    border-color var(--transition-base),
+    box-shadow var(--transition-base),
+    transform var(--transition-fast);
+  outline: none;
+  user-select: none;
+
+  &:hover {
+    border-color: var(--color-primary-border);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--color-primary-border);
+    border-color: var(--color-primary);
+  }
+
+  &--selected {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary-border);
+
+    .page-card__footer {
+      background-color: var(--color-primary);
+    }
+
+    .page-card__number {
+      color: #fff;
+    }
+  }
+
+  &--rendering {
+    pointer-events: none;
+  }
+
+  // ── Checkbox ───────────────────────────────────────────────────────── //
+  &__checkbox-wrap {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
+  }
+
+  &__checkbox {
+    // Visually hidden but accessible
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  &__checkbox-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid var(--color-border-strong);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+    transition:
+      background-color var(--transition-fast),
+      border-color var(--transition-fast);
+
+    .page-card--selected & {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+  }
+
+  &__check-icon {
+    font-size: 0.75rem;
+    color: #fff;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+
+    .page-card--selected & {
+      opacity: 1;
+    }
+  }
+
+  // ── Thumbnail ─────────────────────────────────────────────────────── //
+  &__thumbnail-wrap {
+    flex: 1;
+    background: #f3f4f6;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  &__skeleton {
+    width: 100%;
+    height: 100%;
+    background: #e5e7eb;
+    position: relative;
+    overflow: hidden;
+  }
+
+  &__skeleton-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.5) 50%,
+      transparent 100%
+    );
+    animation: shimmer 1.4s infinite;
+  }
+
+  // ── Footer ─────────────────────────────────────────────────────────── //
+  &__footer {
+    padding: 0.5rem;
+    text-align: center;
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+    transition: background-color var(--transition-base);
+  }
+
+  &__number {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    transition: color var(--transition-base);
+  }
+
+  // ── Selected ring ──────────────────────────────────────────────────── //
+  &__selected-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: calc(var(--radius-md) - 1px);
+    box-shadow: inset 0 0 0 2px var(--color-primary);
+    pointer-events: none;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

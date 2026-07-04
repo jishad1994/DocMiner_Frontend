@@ -1,0 +1,67 @@
+<!-- Header bar: file name + selection controls -->
+<div class="grid-header">
+  <div class="grid-header__meta">
+    <div class="grid-header__file-icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M4 2h8l4 4v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1Z"
+          stroke="var(--color-primary)" stroke-width="1.5" fill="var(--color-primary-light)" />
+        <path d="M12 2v4h4" stroke="var(--color-primary)" stroke-width="1.5" stroke-linejoin="round" />
+      </svg>
+    </div>
+    <div>
+      <p class="grid-header__filename">{{ pdfMetadata().originalName }}</p>
+      <p class="grid-header__pagecount">
+        {{ pdfMetadata().totalPages }} page{{ pdfMetadata().totalPages !== 1 ? 's' : '' }}
+        @if (selectedCount() > 0) {
+          · <strong>{{ selectedCount() }} selected</strong>
+        }
+      </p>
+    </div>
+  </div>
+
+  <div class="grid-header__actions">
+    @if (allSelected()) {
+      <button class="btn btn-ghost btn-sm" (click)="onDeselectAll()" type="button">
+        Deselect all
+      </button>
+    } @else {
+      <button class="btn btn-ghost btn-sm" (click)="onSelectAll()" type="button">
+        Select all
+      </button>
+    }
+  </div>
+</div>
+
+<!-- Render progress bar -->
+@if (isRendering()) {
+  <div class="render-progress" role="status" aria-label="Rendering page thumbnails">
+    <div class="render-progress__bar">
+      <div
+        class="render-progress__fill"
+        [style.width.%]="renderProgress()"
+      ></div>
+    </div>
+    <span class="render-progress__label">
+      Generating previews… {{ renderProgress() }}%
+    </span>
+  </div>
+}
+
+<!-- Page grid -->
+<div class="page-grid" role="group" aria-label="PDF pages — click to select">
+  @for (pageNumber of pageNumbers(); track pageNumber) {
+    <app-page-card
+      [pageNumber]="pageNumber"
+      [thumbnailUrl]="thumbnailAt(pageNumber - 1)"
+      [isSelected]="isPageSelected(pageNumber)"
+      [isRendering]="isPageRendering(pageNumber - 1)"
+      (toggled)="onPageToggled($event)"
+    />
+  }
+</div>
+
+@if (selectedCount() === 0 && !isRendering()) {
+  <p class="grid-hint" role="note">
+    Click on pages to select them for extraction.
+  </p>
+}
