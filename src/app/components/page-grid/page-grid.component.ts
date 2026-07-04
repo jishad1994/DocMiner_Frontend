@@ -9,28 +9,20 @@ import { PageCardComponent } from "../page-card/page-card.component";
     styleUrl: "./page-grid.component.scss",
 })
 export class PageGridComponent {
-    /** Metadata returned by the upload API (id, totalPages, originalName …). */
     readonly pdfMetadata = input.required<UploadPdfResponseDto>();
 
-    /** Array of JPEG data-URL strings, one per page (may be sparse while rendering). */
     readonly thumbnailUrls = input.required<string[]>();
 
-    /** Set of currently selected 1-based page numbers. */
     readonly selectedPages = input.required<ReadonlySet<number>>();
 
-    /** True while PDF.js is still generating thumbnails. */
     readonly isRendering = input<boolean>(false);
 
-    /** Render progress percentage (0–100). */
     readonly renderProgress = input<number>(0);
 
-    /** Emits the 1-based page number that was toggled. */
     readonly pageToggled = output<number>();
 
-    /** Emits true to select all pages, false to deselect all. */
     readonly selectAllToggled = output<boolean>();
 
-    /** Array of 1-based page numbers used for @for loops. */
     protected readonly pageNumbers = computed<number[]>(() => {
         const total = this.pdfMetadata().totalPages;
         return Array.from({ length: total }, (_, i) => i + 1);
