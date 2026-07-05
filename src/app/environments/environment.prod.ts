@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: '/api', // Assumes the API is served from the same origin in production
+  apiBaseUrl: 'https://backendDockMiner.jishadkolapurath.online/api', // Assumes the API is served from the same origin in production
 };
